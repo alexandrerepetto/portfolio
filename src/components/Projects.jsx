@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient.js';
-import Button from './Button.jsx'; 
+import Button from './Button.jsx';
+import './Projects.css'; 
 
 function Projects() {
   
