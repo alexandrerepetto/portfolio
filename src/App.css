@@ -40,3 +40,85 @@
 .read-the-docs {
   color: #888;
 }
+/* Estilos para a seção principal */
+.projects-section {
+    padding: 50px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #f0f0f0; /* Cor do texto claro */
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #64ffda; /* Cor de destaque (Mint) */
+}
+
+/* Estilos para o GRID (Layout) */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Estilos para o Card de Projeto */
+.project-card {
+    border-radius: 12px;
+    background-color: #1e1e1e; /* Fundo escuro */
+    overflow: hidden; /* Garante que a imagem siga o border-radius */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px); /* Efeito de elevação ao passar o mouse */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Container da Imagem para o Efeito Overlay */
+.project-image-container {
+    position: relative;
+    height: 200px; /* Altura fixa para todas as imagens */
+    overflow: hidden;
+}
+
+.project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Recorta a imagem para cobrir a área sem distorcer */
+    transition: transform 0.5s ease;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.05); /* Zoom suave ao passar o mouse */
+}
+
+/* Efeito de Máscara (Overlay) */
+.project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Preto semi-transparente */
+    pointer-events: none; /* Permite clicar no botão por baixo */
+}
+
+/* Detalhes e Texto */
+.project-details {
+    padding: 20px;
+}
+
+.project-title {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+    color: #f0f0f0;
+}
+
+.project-description {
+    color: #aaa;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}

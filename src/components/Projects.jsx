@@ -4,33 +4,34 @@ import Button from './Button.jsx';
 
 function Projects() {
   
+  // 1. Estado para dados e loading
   const [projetos, setProjetos] = useState([]); 
   const [loading, setLoading] = useState(true);
 
+  // 2. Função para buscar dados e construir URLs de imagem
   useEffect(() => {
     async function fetchProjetos() {
       
+      // Busca dados da tabela 'projetos'
       const { data, error } = await supabase
         .from('projetos') 
         .select('*');
 
       if (error) {
         console.error('Erro ao buscar projetos:', error);
-        setLoading(false); // Parar o loading mesmo com erro
+        setLoading(false);
         return;
       }
-      
-      // --- INÍCIO DA MODIFICAÇÃO PARA IMAGENS ---
-      // 1. Processa os dados para obter a URL pública de cada imagem
+      
+      // Processa os dados para obter a URL pública de cada imagem
       const projetosComUrl = data.map(projeto => {
         // Verifica se o campo 'imagem' (o path) existe no projeto
         if (projeto.imagem) {
-            // Usa a função do Supabase para obter a URL pública
-            // 'imagens-portfolio' é o nome do seu bucket
+            // Usa a função do Supabase Storage para construir a URL completa
             const { data: publicUrlData } = supabase
                 .storage
-                .from('imagens-portfolio') 
-                .getPublicUrl(projeto.imagem); // 'projeto.imagem' é o path (ex: Projetos/bpx.png)
+                .from('imagens-portfolio') // Nome do seu bucket
+                .getPublicUrl(projeto.imagem); // Ex: 'Projetos/bpx.png'
 
             return {
                 ...projeto,
@@ -41,52 +42,48 @@ function Projects() {
       });
 
       setProjetos(projetosComUrl);
-      // --- FIM DA MODIFICAÇÃO PARA IMAGENS ---
-
       setLoading(false);
     }
 
     fetchProjetos();
   }, []); 
 
+  // 3. Renderiza o estado de Loading
   if (loading) {
-    return <h2 style={{ textAlign: 'center', padding: '50px' }}>Carregando projetos...</h2>;
+    return <h2 className="loading-message">Carregando projetos...</h2>;
   }
   
+  // 4. Renderiza o conteúdo (usando as classes CSS)
   return (
-    <section id="projetos" style={{ padding: '50px 20px', maxWidth: '1200px', margin: '0 auto' }}>
+    <section id="projetos" className="projects-section">
       
-      <h2 style={{ textAlign: 'center', marginBottom: '40px', fontSize: '2rem' }}>
+      <h2 className="section-title">
         Meus Trabalhos Selecionados
       </h2>
 
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-        gap: '30px' 
-      }}>
+      <div className="projects-grid">
         
         {projetos.map((projeto) => ( 
           
-          <div key={projeto.id} style={{ 
-            border: '1px solid #333', 
-            borderRadius: '12px', 
-            padding: '20px',
-            backgroundColor: '#1e1e1e'
-          }}>
-            {/* INÍCIO DA MODIFICAÇÃO NA IMAGEM */}
-            {projeto.imageUrl && (
-              <img 
-                src={projeto.imageUrl} // AGORA USA A URL PÚBLICA CONSTRUÍDA
-                alt={projeto.titulo} 
-                style={{ width: '100%', borderRadius: '8px', marginBottom: '15px' }}
-              />
-            )}
-            {/* FIM DA MODIFICAÇÃO NA IMAGEM */}
-            <h3 style={{ margin: '0 0 10px 0' }}>{projeto.titulo}</h3>
-            <p style={{ color: '#aaa', marginBottom: '20px' }}>{projeto.descricao}</p>
+          <div key={projeto.id} className="project-card">
+            {/* Container para a imagem e o overlay */}
+            <div className="project-image-container">
+              {projeto.imageUrl && (
+                <img 
+                  src={projeto.imageUrl} // Usa a URL pública
+                  alt={projeto.titulo} 
+                  className="project-image"
+                />
+              )}
+              <div className="project-overlay"></div> {/* Máscara de estilo */}
+            </div>
+
+            <div className="project-details">
+              <h3 className="project-title">{projeto.titulo}</h3>
+              <p className="project-description">{projeto.descricao}</p>
             
-            <Button label="Ver Detalhes" link="#" />
+              <Button label="Ver Detalhes" link="#" />
+            </div>
           </div>
 
         ))}
