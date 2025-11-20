@@ -8,7 +8,7 @@ function Projects() {
   const [projetos, setProjetos] = useState([]); 
   const [loading, setLoading] = useState(true);
 
-  // 2. Função para buscar dados e construir URLs de imagem
+  // 2. Função para buscar dados e construir URLs de imagem (Lógica Supabase)
   useEffect(() => {
     async function fetchProjetos() {
       
@@ -25,17 +25,15 @@ function Projects() {
       
       // Processa os dados para obter a URL pública de cada imagem
       const projetosComUrl = data.map(projeto => {
-        // Verifica se o campo 'imagem' (o path) existe no projeto
         if (projeto.imagem) {
-            // Usa a função do Supabase Storage para construir a URL completa
             const { data: publicUrlData } = supabase
                 .storage
                 .from('imagens-portfolio') // Nome do seu bucket
-                .getPublicUrl(projeto.imagem); // Ex: 'Projetos/bpx.png'
+                .getPublicUrl(projeto.imagem);
 
             return {
                 ...projeto,
-                imageUrl: publicUrlData.publicUrl // Adiciona a URL completa como 'imageUrl'
+                imageUrl: publicUrlData.publicUrl // Adiciona a URL completa
             };
         }
         return projeto;
@@ -53,7 +51,7 @@ function Projects() {
     return <h2 className="loading-message">Carregando projetos...</h2>;
   }
   
-  // 4. Renderiza o conteúdo (usando as classes CSS)
+  // 4. Renderiza o conteúdo (usando as novas classes CSS)
   return (
     <section id="projetos" className="projects-section">
       
@@ -66,23 +64,23 @@ function Projects() {
         {projetos.map((projeto) => ( 
           
           <div key={projeto.id} className="project-card">
-            {/* Container para a imagem e o overlay */}
+            {/* Container para a imagem (para controle de tamanho e overflow) */}
             <div className="project-image-container">
               {projeto.imageUrl && (
                 <img 
-                  src={projeto.imageUrl} // Usa a URL pública
+                  src={projeto.imageUrl} // URL Pública
                   alt={projeto.titulo} 
                   className="project-image"
                 />
               )}
-              <div className="project-overlay"></div> {/* Máscara de estilo */}
+              {/* REMOVIDO: div.project-overlay não é mais necessária */}
             </div>
 
             <div className="project-details">
-              <h3 className="project-title">{projeto.titulo}</h3>
-              <p className="project-description">{projeto.descricao}</p>
+              <h3 className="project-title">{projeto.titulo}</h3>
+              <p className="project-description">{projeto.descricao}</p>
             
-              <Button label="Ver Detalhes" link="#" />
+              <Button label="Ver Detalhes" link="#" />
             </div>
           </div>
 
